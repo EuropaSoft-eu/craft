@@ -9,7 +9,7 @@ Les fichiers ouverts restent dans le navigateur : rien n'est envoyé sur un serv
 ## Fonctionnement
 
 - Le dépôt ne contient pas les logiciels. À chaque publication, `build.py` télécharge la dernière version web officielle de chaque app depuis [github.com/storytold](https://github.com/storytold), la place dans un sous-dossier et ajoute le manifeste et le service worker qui la rendent installable et utilisable hors connexion.
-- La publication (`.github/workflows/publier.yml`) se lance à chaque modification et automatiquement chaque lundi : le site suit les nouvelles versions sans intervention.
+- La publication (`.github/workflows/publier.yml`) vérifie toutes les 3 heures si une app a publié une nouvelle version et, seulement dans ce cas, reconstruit et republie le site. Elle se lance aussi à chaque modification du dépôt ou à la main.
 - La liste des apps est dans `apps.json`.
 
 ## Tester en local

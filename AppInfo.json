@@ -6,8 +6,17 @@
   "website": "https://europasoft-eu.github.io/craft/",
   "contact": "contact@europasoft.eu",
   "copyright": "© 2026 EuropaSoft pour la page d'accueil et l'emballage — Craft Apps © ArtCraft / storytold (Apache 2.0, MIT)",
-  "description": "Les 13 Crafting Apps open source d'ArtCraft utilisables dans le navigateur, sans installation, installables en PWA, mises à jour automatiquement chaque semaine.",
+  "description": "Les 13 Crafting Apps open source d'ArtCraft utilisables dans le navigateur, sans installation, installables en PWA, alignées automatiquement sur les versions officielles (vérification toutes les 3 heures).",
   "changelog": [
+    {
+      "version": "1.1",
+      "date": "2026-10-28",
+      "changes": [
+        "Vérification des versions officielles toutes les 3 heures au lieu d'une fois par semaine",
+        "Republication seulement quand une app a changé",
+        "Composants de publication GitHub mis à jour (fin de Node.js 20)"
+      ]
+    },
     {
       "version": "1.0",
       "date": "2026-10-28",

@@ -1,12 +1,13 @@
-# Récupère les dernières versions web officielles des Craft Apps et publie le site sur GitHub Pages.
-# Se lance à chaque modification, chaque lundi matin, ou à la main (onglet Actions, « Run workflow »).
+# Garde le site aligné sur les versions officielles des Craft Apps.
+# Toutes les 3 heures : vérifie si une app a publié une nouvelle version et, seulement dans ce cas, reconstruit et republie.
+# À chaque modification du dépôt ou lancement manuel (onglet Actions, « Run workflow ») : reconstruit toujours.
 name: Publier le site
 
 on:
   push:
     branches: [main]
   schedule:
-    - cron: "0 4 * * 1"
+    - cron: "17 */3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -16,14 +17,36 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
+
+env:
+  SITE_URL: https://europasoft-eu.github.io/craft/
 
 jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: check
+        name: Comparer avec les dernières versions officielles
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            python3 build.py --check "$SITE_URL" | tee -a "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
   construire:
+    needs: verifier
+    if: needs.verifier.outputs.changed == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - run: pip install pillow
@@ -31,7 +54,7 @@ jobs:
         run: python build.py --out _site
         env:
           GH_TOKEN: ${{ github.token }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
@@ -43,4 +66,4 @@ jobs:
       url: ${{ steps.pages.outputs.page_url }}
     steps:
       - id: pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
