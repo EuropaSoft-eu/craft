@@ -1,0 +1,46 @@
+# Récupère les dernières versions web officielles des Craft Apps et publie le site sur GitHub Pages.
+# Se lance à chaque modification, chaque lundi matin, ou à la main (onglet Actions, « Run workflow »).
+name: Publier le site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  construire:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - name: Construire le site
+        run: python build.py --out _site
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  publier:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - id: pages
+        uses: actions/deploy-pages@v4

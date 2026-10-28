@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Craft Apps</title>
+<meta name="description" content="Les Crafting Apps open source d'ArtCraft, utilisables dans le navigateur sans installation.">
+<meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16161A" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #F7F5F0; --surface: #FFFFFF; --text: #1C1B19; --muted: #6B6862; --line: #E4E0D8; --accent: #1D4ED8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #16161A; --surface: #202026; --text: #ECEAE6; --muted: #9C9993; --line: #2E2E36; --accent: #8AB4FF; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-tap-highlight-color: transparent; }
+  main { max-width: 1040px; margin: 0 auto; padding: 40px 16px 64px; }
+  h1 { font-size: 1.9rem; margin: 0 0 6px; text-wrap: balance; }
+  .lead { color: var(--muted); margin: 0 0 28px; max-width: 62ch; }
+  h2 { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 32px 0 12px; }
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+  a.card { display: flex; gap: 12px; align-items: flex-start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; touch-action: manipulation; }
+  a.card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ico { flex: none; width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .95rem; }
+  .name { font-weight: 650; }
+  .rep { color: var(--muted); font-size: .85rem; }
+  .desc { font-size: .9rem; margin-top: 4px; }
+  .ver { color: var(--muted); font-size: .75rem; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .notes { margin-top: 40px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); font-size: .9rem; }
+  .notes h3 { margin: 0 0 8px; font-size: 1rem; }
+  .notes ul { margin: 0; padding-left: 1.2em; }
+  .notes li { margin: 4px 0; }
+  footer { margin-top: 32px; color: var(--muted); font-size: .8rem; }
+  footer a { color: inherit; }
+  @media (prefers-reduced-motion: reduce) { a.card { transition: none; } a.card:hover { transform: none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Craft Apps</h1>
+  <p class="lead">Logiciels open source d'ArtCraft, à utiliser directement dans le navigateur, sans installation. Les fichiers ouverts restent dans votre navigateur : rien n'est envoyé sur un serveur.</p>
+{{CARDS}}
+  <section class="notes">
+    <h3>Bon à savoir</h3>
+    <ul>
+      <li><strong>Premier lancement :</strong> l'application se télécharge (10 à 90 Mo selon l'outil). Ensuite, elle est gardée en cache et s'ouvre vite, même hors connexion.</li>
+      <li><strong>Installer comme une application (PWA) :</strong> dans Edge ou Chrome, ouvrez l'outil, puis cliquez sur l'icône « Installer » à droite de la barre d'adresse. Aucun droit administrateur n'est demandé.</li>
+      <li><strong>Ouvrir et enregistrer :</strong> « Ouvrir » utilise le sélecteur de fichiers du navigateur, « Enregistrer » télécharge le fichier.</li>
+      <li><strong>Maturité :</strong> ces logiciels sont jeunes et évoluent chaque semaine. Gardez une copie de vos documents importants avant de les modifier.</li>
+    </ul>
+  </section>
+  <footer>
+    Logiciels © ArtCraft / storytold, licences Apache 2.0 et MIT (<a href="https://github.com/storytold">github.com/storytold</a>). Versions officielles republiées sans modification, hors ajout du mode PWA. Mise à jour automatique chaque semaine — dernière : {{DATE}}.
+  </footer>
+</main>
+<script>
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
+</script>
+</body>
+</html>

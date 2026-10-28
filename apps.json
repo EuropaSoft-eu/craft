@@ -1,0 +1,15 @@
+[
+  {"slug": "pdf", "repo": "pdfcraft", "name": "PdfCraft", "replaces": "Acrobat", "group": "Bureautique", "color": "#C2410C", "desc": "Lire, annoter, remplir et réorganiser des PDF.", "abbr": "Pd"},
+  {"slug": "word", "repo": "wordcraft", "name": "WordCraft", "replaces": "Word", "group": "Bureautique", "color": "#1D4ED8", "desc": "Traitement de texte, ouvre et enregistre les .docx.", "abbr": "Wd"},
+  {"slug": "grid", "repo": "gridcraft", "name": "GridCraft", "replaces": "Excel", "group": "Bureautique", "color": "#15803D", "desc": "Tableur, ouvre et enregistre les .xlsx.", "abbr": "Gr"},
+  {"slug": "deck", "repo": "deckcraft", "name": "DeckCraft", "replaces": "PowerPoint", "group": "Bureautique", "color": "#B91C1C", "desc": "Présentations et diaporamas, ouvre les .pptx.", "abbr": "Dk"},
+  {"slug": "photo", "repo": "photocraft", "name": "PhotoCraft", "replaces": "Photoshop", "group": "Image et design", "color": "#0E7490", "desc": "Retouche photo par calques.", "abbr": "Ph"},
+  {"slug": "light", "repo": "lightcraft", "name": "LightCraft", "replaces": "Lightroom", "group": "Image et design", "color": "#7C3AED", "desc": "Développement photo non destructif.", "abbr": "Lt"},
+  {"slug": "vector", "repo": "vectorcraft", "name": "VectorCraft", "replaces": "Illustrator", "group": "Image et design", "color": "#DB2777", "desc": "Dessin vectoriel, logos, pictogrammes.", "abbr": "Vc"},
+  {"slug": "design", "repo": "designcraft", "name": "DesignCraft", "replaces": "InDesign", "group": "Image et design", "color": "#BE185D", "desc": "Mise en page : affiches, flyers, brochures.", "abbr": "Ds"},
+  {"slug": "fig", "repo": "figcraft", "name": "FigCraft", "replaces": "Figma", "group": "Image et design", "color": "#4F46E5", "desc": "Maquettes d'interfaces et prototypes.", "abbr": "Fg"},
+  {"slug": "film", "repo": "filmcraft", "name": "FilmCraft", "replaces": "Premiere Pro", "group": "Vidéo et son", "color": "#6D28D9", "desc": "Montage vidéo.", "abbr": "Fm"},
+  {"slug": "effect", "repo": "effectcraft", "name": "EffectCraft", "replaces": "After Effects", "group": "Vidéo et son", "color": "#5B21B6", "desc": "Animation graphique et compositing.", "abbr": "Ef"},
+  {"slug": "sound", "repo": "soundcraft", "name": "SoundCraft", "replaces": "Pro Tools", "group": "Vidéo et son", "color": "#0F766E", "desc": "Enregistrement et montage audio.", "abbr": "Sd"},
+  {"slug": "cad", "repo": "cadcraft", "name": "CADCraft", "replaces": "AutoCAD", "group": "Technique", "color": "#475569", "desc": "Dessin technique et plans 2D.", "abbr": "Cd"}
+]
