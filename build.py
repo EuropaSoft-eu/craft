@@ -104,6 +104,66 @@ def icon_png(abbr, color, size, path):
     return True
 
 
+HOME_TOP, HOME_BOTTOM, HEART = "#3B6CF6", "#1E3A8A", "#FF4D6D"
+HEART_PATH = "M0,-14 C-6,-30 -34,-28 -34,-6 C-34,12 -14,24 0,36 C14,24 34,12 34,-6 C34,-28 6,-30 0,-14Z"
+
+
+def home_icon_svg():
+    """Icône de la page d'accueil : monogramme AC et petit cœur (dessin propre au site,
+    distinct du logo ArtCraft, qui est une marque non libre)."""
+    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
+            f'<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{HOME_TOP}"/>'
+            f'<stop offset="1" stop-color="{HOME_BOTTOM}"/></linearGradient></defs>'
+            '<rect width="512" height="512" rx="112" fill="url(#g)"/>'
+            '<text x="242" y="300" dy=".3em" text-anchor="middle" font-family="Georgia,\'Times New Roman\',serif" '
+            'font-style="italic" font-weight="700" font-size="250" letter-spacing="-18" fill="#fff">AC</text>'
+            f'<g transform="translate(398 128) scale(1.9)"><path d="{HEART_PATH}" fill="{HEART}" stroke="#fff" stroke-width="6"/></g></svg>')
+
+
+def home_icon_png(size, path):
+    """Même dessin en PNG (Pillow ne lit pas le SVG) : rendu à 1024 px puis réduit."""
+    from PIL import Image, ImageDraw, ImageFont
+    big = 1024
+    k = big / 512
+    top = tuple(int(HOME_TOP[i:i + 2], 16) for i in (1, 3, 5))
+    bottom = tuple(int(HOME_BOTTOM[i:i + 2], 16) for i in (1, 3, 5))
+    grad = Image.new("RGBA", (big, big))
+    gd = ImageDraw.Draw(grad)
+    for y in range(big):
+        t = y / (big - 1)
+        gd.line([(0, y), (big, y)], fill=tuple(round(a + (b - a) * t) for a, b in zip(top, bottom)))
+    mask = Image.new("L", (big, big), 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, big - 1, big - 1], radius=int(112 * k), fill=255)
+    img = Image.new("RGBA", (big, big), (0, 0, 0, 0))
+    img.paste(grad, (0, 0), mask)
+    draw = ImageDraw.Draw(img)
+    font = None
+    for candidate in ["/System/Library/Fonts/Supplemental/Georgia Bold Italic.ttf",
+                      "/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf",
+                      "/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf", "DejaVuSerif-BoldItalic.ttf",
+                      "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"]:
+        try:
+            font = ImageFont.truetype(candidate, int(250 * k))
+            break
+        except OSError:
+            continue
+    font = font or ImageFont.load_default(size=int(250 * k))
+    a_w = draw.textlength("A", font=font)
+    c_w = draw.textlength("C", font=font)
+    gap = -18 * k
+    x = 242 * k - (a_w + gap + c_w) / 2
+    draw.text((x, 300 * k), "A", fill="white", font=font, anchor="lm")
+    draw.text((x + a_w + gap, 300 * k), "C", fill="white", font=font, anchor="lm")
+    # Cœur : deux disques et un triangle, contour blanc
+    cx, cy, s = 398 * k, 128 * k, 1.9 * k
+    for grow, color in ((6 * k, "white"), (0, HEART)):
+        r = 17 * s + grow
+        draw.ellipse([cx - 17 * s - r, cy - 8 * s - r, cx - 17 * s + r, cy - 8 * s + r], fill=color)
+        draw.ellipse([cx + 17 * s - r, cy - 8 * s - r, cx + 17 * s + r, cy - 8 * s + r], fill=color)
+        draw.polygon([(cx - 33 * s - grow, cy - 2 * s), (cx + 33 * s + grow, cy - 2 * s), (cx, cy + 36 * s + grow * 1.4)], fill=color)
+    img.resize((size, size), Image.LANCZOS).save(path, optimize=True)
+
+
 def write_pwa(folder, name, short, color, abbr, cache_name, sw_template, root_only=False, official=None):
     """official : chemin de l'icône officielle 512 px ; sinon, icône de secours (initiales)."""
     if official:
@@ -233,7 +293,11 @@ def main():
     page = page.replace("{{CARDS}}", "\n".join(cards)).replace("{{DATE}}", today)
     with open(os.path.join(out, "index.html"), "w", encoding="utf-8") as f:
         f.write(page)
-    write_pwa(out, "Craft Apps", "Craft", "#1D4ED8", "Cr", f"craft-home@{today}", sw_template, root_only=True)
+    write_pwa(out, "Craft Apps", "Craft", "#1D4ED8", "AC", f"craft-home@{today}", sw_template, root_only=True)
+    with open(os.path.join(out, "icon.svg"), "w") as f:
+        f.write(home_icon_svg())
+    for size in (192, 512):
+        home_icon_png(size, os.path.join(out, f"icon-{size}.png"))
     with open(os.path.join(out, "versions.json"), "w") as f:
         json.dump(versions, f, indent=2)
     open(os.path.join(out, ".nojekyll"), "w").close()
