@@ -109,14 +109,14 @@ HEART_PATH = "M0,-14 C-6,-30 -34,-28 -34,-6 C-34,12 -14,24 0,36 C14,24 34,12 34,
 
 
 def home_icon_svg():
-    """Icône de la page d'accueil : monogramme AC et petit cœur (dessin propre au site,
+    """Icône de la page d'accueil : monogramme CA (Craft Apps) et petit cœur (dessin propre au site,
     distinct du logo ArtCraft, qui est une marque non libre)."""
     return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">'
             f'<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{HOME_TOP}"/>'
             f'<stop offset="1" stop-color="{HOME_BOTTOM}"/></linearGradient></defs>'
             '<rect width="512" height="512" rx="112" fill="url(#g)"/>'
             '<text x="242" y="300" dy=".3em" text-anchor="middle" font-family="Georgia,\'Times New Roman\',serif" '
-            'font-style="italic" font-weight="700" font-size="250" letter-spacing="-18" fill="#fff">AC</text>'
+            'font-style="italic" font-weight="700" font-size="250" letter-spacing="-18" fill="#fff">CA</text>'
             f'<g transform="translate(398 128) scale(1.9)"><path d="{HEART_PATH}" fill="{HEART}" stroke="#fff" stroke-width="6"/></g></svg>')
 
 
@@ -148,12 +148,12 @@ def home_icon_png(size, path):
         except OSError:
             continue
     font = font or ImageFont.load_default(size=int(250 * k))
-    a_w = draw.textlength("A", font=font)
     c_w = draw.textlength("C", font=font)
+    a_w = draw.textlength("A", font=font)
     gap = -18 * k
-    x = 242 * k - (a_w + gap + c_w) / 2
-    draw.text((x, 300 * k), "A", fill="white", font=font, anchor="lm")
-    draw.text((x + a_w + gap, 300 * k), "C", fill="white", font=font, anchor="lm")
+    x = 242 * k - (c_w + gap + a_w) / 2
+    draw.text((x, 300 * k), "C", fill="white", font=font, anchor="lm")
+    draw.text((x + c_w + gap, 300 * k), "A", fill="white", font=font, anchor="lm")
     # Cœur : deux disques et un triangle, contour blanc
     cx, cy, s = 398 * k, 128 * k, 1.9 * k
     for grow, color in ((6 * k, "white"), (0, HEART)):
@@ -293,7 +293,7 @@ def main():
     page = page.replace("{{CARDS}}", "\n".join(cards)).replace("{{DATE}}", today)
     with open(os.path.join(out, "index.html"), "w", encoding="utf-8") as f:
         f.write(page)
-    write_pwa(out, "Craft Apps", "Craft", "#1D4ED8", "AC", f"craft-home@{today}", sw_template, root_only=True)
+    write_pwa(out, "Craft Apps", "Craft", "#1D4ED8", "CA", f"craft-home@{today}", sw_template, root_only=True)
     with open(os.path.join(out, "icon.svg"), "w") as f:
         f.write(home_icon_svg())
     for size in (192, 512):
