@@ -1,8 +1,10 @@
-# Craft Apps dans le navigateur
+# Craft Apps Online
 
 **https://europasoft-eu.github.io/craft/**
 
 Les 13 Crafting Apps open source d'[ArtCraft](https://getartcraft.com) (PdfCraft, WordCraft, GridCraft, DeckCraft, PhotoCraft, LightCraft, VectorCraft, DesignCraft, FigCraft, FilmCraft, EffectCraft, SoundCraft, CADCraft), utilisables directement dans le navigateur, sans installation et sans droits administrateur. Chaque outil peut aussi être installé comme application (PWA) depuis Edge ou Chrome.
+
+Site **non officiel**, sans lien avec ArtCraft : il sert aux postes et appareils où l'installation classique n'est pas possible. Merci à l'équipe d'ArtCraft pour son travail.
 
 Les fichiers ouverts restent dans le navigateur : rien n'est envoyé sur un serveur.
 

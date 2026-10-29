@@ -293,7 +293,7 @@ def main():
     page = page.replace("{{CARDS}}", "\n".join(cards)).replace("{{DATE}}", today)
     with open(os.path.join(out, "index.html"), "w", encoding="utf-8") as f:
         f.write(page)
-    write_pwa(out, "Craft Apps", "Craft", "#1D4ED8", "CA", f"craft-home@{today}", sw_template, root_only=True)
+    write_pwa(out, "Craft Apps Online", "Craft Apps", "#1D4ED8", "CA", f"craft-home@{today}", sw_template, root_only=True)
     with open(os.path.join(out, "icon.svg"), "w") as f:
         f.write(home_icon_svg())
     for size in (192, 512):

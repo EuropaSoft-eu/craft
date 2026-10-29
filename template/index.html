@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Craft Apps</title>
+<title>Craft Apps Online</title>
 <meta name="description" content="Les Crafting Apps open source d'ArtCraft, utilisables dans le navigateur sans installation.">
 <meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#16161A" media="(prefers-color-scheme: dark)">
@@ -21,7 +21,9 @@
   body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-tap-highlight-color: transparent; }
   main { max-width: 1040px; margin: 0 auto; padding: 40px 16px 64px; }
   h1 { font-size: 1.9rem; margin: 0 0 6px; text-wrap: balance; }
-  .lead { color: var(--muted); margin: 0 0 28px; max-width: 62ch; }
+  .lead { color: var(--muted); margin: 0 0 16px; max-width: 62ch; }
+  .unofficial { margin: 0 0 28px; padding: 12px 14px; border: 1px solid var(--line); border-left: 4px solid #FF4D6D; border-radius: 10px; background: var(--surface); font-size: .9rem; max-width: 72ch; }
+  .unofficial a { color: var(--accent); }
   h2 { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 32px 0 12px; }
   .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
   a.card { display: flex; gap: 12px; align-items: flex-start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; touch-action: manipulation; }
@@ -48,8 +50,9 @@
 </head>
 <body>
 <main>
-  <h1>Craft Apps</h1>
+  <h1>Craft Apps Online</h1>
   <p class="lead">Logiciels open source d'ArtCraft, à utiliser directement dans le navigateur, sans installation. Les fichiers ouverts restent dans votre navigateur : rien n'est envoyé sur un serveur.</p>
+  <p class="unofficial"><strong>Site non officiel.</strong> Ces logiciels sont l'œuvre de l'équipe d'<a href="https://getartcraft.com">ArtCraft</a>, que nous remercions chaleureusement pour son travail et pour le choix de le partager en open source. Ce site n'est ni édité ni soutenu par ArtCraft : il lance simplement leurs versions officielles dans le navigateur, pour les postes et appareils où l'installation classique n'est pas possible. Si vous pouvez installer des logiciels, préférez les versions de bureau sur <a href="https://getartcraft.com">getartcraft.com</a>.</p>
 {{CARDS}}
   <section class="notes">
     <h3>Bon à savoir</h3>
