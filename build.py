@@ -41,6 +41,29 @@ def latest_web_zip(repo, zips_dir, work):
     return info["tagName"].lstrip("v"), os.path.join(work, names[0])
 
 
+def official_icon(repo, version, dest_png):
+    """Télécharge l'icône officielle de l'app (512 px) depuis son dépôt, à la version publiée.
+    Renvoie False si elle est introuvable : l'icône de secours est alors générée."""
+    path = f"assets/app-icon/hicolor/512x512/apps/ai.storyteller.{repo}.png"
+    for ref in (f"v{version}", version, "HEAD"):
+        try:
+            data = subprocess.check_output(
+                ["gh", "api", "-H", "Accept: application/vnd.github.raw",
+                 f"repos/storytold/{repo}/contents/{path}?ref={ref}"], stderr=subprocess.DEVNULL)
+        except subprocess.CalledProcessError:
+            continue
+        if data.startswith(b"\x89PNG"):
+            with open(dest_png, "wb") as f:
+                f.write(data)
+            return True
+    return False
+
+
+def resize_png(src, size, dest):
+    from PIL import Image
+    Image.open(src).convert("RGBA").resize((size, size), Image.LANCZOS).save(dest, optimize=True)
+
+
 def extract(zip_path, dest):
     """Décompresse le zip en retirant son dossier racine (ex. gridcraft-web-0.13.0/)."""
     with tempfile.TemporaryDirectory() as tmp:
@@ -81,13 +104,20 @@ def icon_png(abbr, color, size, path):
     return True
 
 
-def write_pwa(folder, name, short, color, abbr, cache_name, sw_template, root_only=False):
-    with open(os.path.join(folder, "icon.svg"), "w") as f:
-        f.write(icon_svg(abbr, color))
-    icons = [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]
-    for size in (192, 512):
-        if icon_png(abbr, color, size, os.path.join(folder, f"icon-{size}.png")):
+def write_pwa(folder, name, short, color, abbr, cache_name, sw_template, root_only=False, official=None):
+    """official : chemin de l'icône officielle 512 px ; sinon, icône de secours (initiales)."""
+    if official:
+        icons = []
+        for size in (192, 512):
+            resize_png(official, size, os.path.join(folder, f"icon-{size}.png"))
             icons.append({"src": f"icon-{size}.png", "sizes": f"{size}x{size}", "type": "image/png", "purpose": "any"})
+    else:
+        with open(os.path.join(folder, "icon.svg"), "w") as f:
+            f.write(icon_svg(abbr, color))
+        icons = [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]
+        for size in (192, 512):
+            if icon_png(abbr, color, size, os.path.join(folder, f"icon-{size}.png")):
+                icons.append({"src": f"icon-{size}.png", "sizes": f"{size}x{size}", "type": "image/png", "purpose": "any"})
     manifest = {"name": name, "short_name": short, "lang": "fr", "start_url": "./", "scope": "./",
                 "display": "standalone", "background_color": "#16161A", "theme_color": color, "icons": icons}
     with open(os.path.join(folder, "manifest.webmanifest"), "w") as f:
@@ -106,6 +136,8 @@ def inject_pwa(index_path, color):
     head = (f'<link rel="manifest" href="./manifest.webmanifest">\n'
             f'<meta name="theme-color" content="{color}">\n'
             f'<link rel="apple-touch-icon" href="./icon-192.png">\n')
+    if 'rel="icon"' not in page and "rel='icon'" not in page:
+        head += '<link rel="icon" href="./icon-192.png" type="image/png">\n'
     body = '<script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");</script>\n'
     page = page.replace("</head>", head + "</head>", 1).replace("</body>", body + "</body>", 1)
     with open(index_path, "w", encoding="utf-8") as f:
@@ -153,6 +185,7 @@ def main():
     os.makedirs(out)
     work = tempfile.mkdtemp()
     versions = {}
+    os.makedirs(os.path.join(out, "icons"))
 
     for app in apps:
         version, zip_path = latest_web_zip(app["repo"], args.zips, work)
@@ -163,10 +196,17 @@ def main():
         app_dir, snippets = os.path.join(dest, "app"), os.path.join(dest, "snippets")
         if os.path.isdir(app_dir) and os.path.isdir(snippets) and not os.path.exists(os.path.join(app_dir, "snippets")):
             shutil.copytree(snippets, os.path.join(app_dir, "snippets"))
+        official = os.path.join(work, f"{app['repo']}-512.png")
+        if official_icon(app["repo"], version, official):
+            resize_png(official, 96, os.path.join(out, "icons", f"{app['slug']}.png"))
+            app["icon"] = f"./icons/{app['slug']}.png"
+        else:
+            official = None
+            print(f"{app['name']} : icône officielle introuvable, icône de secours", file=sys.stderr)
         index = os.path.join(dest, "index.html")
         if inject_pwa(index, app["color"]):
             write_pwa(dest, app["name"], app["name"], app["color"], app["abbr"],
-                      f"craft-{app['slug']}@{version}", sw_template)
+                      f"craft-{app['slug']}@{version}", sw_template, official=official)
         versions[app["slug"]] = version
         print(f"{app['name']:12} {version}")
 
@@ -179,9 +219,10 @@ def main():
     for group in groups:
         cards.append(f'  <h2>{html.escape(group)}</h2>\n  <div class="grid">')
         for app in (a for a in apps if a["group"] == group):
+            icon = (f'<img class="ico" src="{app["icon"]}" alt="" width="44" height="44">' if app.get("icon") else
+                    f'<span class="ico" style="background:{app["color"]}" aria-hidden="true">{html.escape(app["abbr"])}</span>')
             cards.append(
-                f'    <a class="card" href="./{app["slug"]}/">'
-                f'<span class="ico" style="background:{app["color"]}" aria-hidden="true">{html.escape(app["abbr"])}</span>'
+                f'    <a class="card" href="./{app["slug"]}/">{icon}'
                 f'<span><span class="name">{html.escape(app["name"])}</span> '
                 f'<span class="rep">· remplace {html.escape(app["replaces"])}</span>'
                 f'<span class="desc" style="display:block">{html.escape(app["desc"])}</span>'

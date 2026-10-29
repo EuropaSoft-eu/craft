@@ -1,13 +1,21 @@
 {
   "appName": "Craft Apps",
-  "version": "1.1",
+  "version": "1.2",
   "company": "EuropaSoft",
   "developer": "Yoann CRAMATTE",
   "website": "https://europasoft-eu.github.io/craft/",
   "contact": "contact@europasoft.eu",
-  "copyright": "© 2026 EuropaSoft pour la page d'accueil et l'emballage — Craft Apps © ArtCraft / storytold (Apache 2.0, MIT)",
+  "copyright": "© 2026 EuropaSoft pour la page d'accueil et l'emballage — Craft Apps et leurs icônes © ArtCraft / storytold (Apache 2.0, MIT)",
   "description": "Les 13 Crafting Apps open source d'ArtCraft utilisables dans le navigateur, sans installation, installables en PWA, alignées automatiquement sur les versions officielles (vérification toutes les 3 heures).",
   "changelog": [
+    {
+      "version": "1.2",
+      "date": "2026-10-29",
+      "changes": [
+        "Icônes officielles de chaque app (dépôt de l'éditeur, à la version publiée) pour la PWA, l'onglet et la page d'accueil",
+        "Section « Merci à l'auteur » : remerciements à ArtCraft et rappel que le site sert seulement à lancer ses versions officielles"
+      ]
+    },
     {
       "version": "1.1",
       "date": "2026-10-28",

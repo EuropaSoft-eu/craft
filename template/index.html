@@ -28,6 +28,7 @@
   a.card:hover { border-color: var(--accent); transform: translateY(-1px); }
   a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .ico { flex: none; width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .95rem; }
+  img.ico { object-fit: cover; }
   .name { font-weight: 650; }
   .rep { color: var(--muted); font-size: .85rem; }
   .desc { font-size: .9rem; margin-top: 4px; }
@@ -35,6 +36,10 @@
   .notes { margin-top: 40px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); font-size: .9rem; }
   .notes h3 { margin: 0 0 8px; font-size: 1rem; }
   .notes ul { margin: 0; padding-left: 1.2em; }
+  .notes p { margin: 0 0 8px; }
+  .notes p:last-child { margin: 0; }
+  .notes a { color: var(--accent); }
+  .notes + .notes { margin-top: 16px; }
   .notes li { margin: 4px 0; }
   footer { margin-top: 32px; color: var(--muted); font-size: .8rem; }
   footer a { color: inherit; }
@@ -55,8 +60,13 @@
       <li><strong>Maturité :</strong> ces logiciels sont jeunes et évoluent souvent ; le site suit automatiquement chaque nouvelle version. Gardez une copie de vos documents importants avant de les modifier.</li>
     </ul>
   </section>
+  <section class="notes">
+    <h3>Merci à l'auteur</h3>
+    <p>Ces logiciels, leurs icônes et tout le travail qu'ils représentent sont l'œuvre de l'équipe d'<a href="https://getartcraft.com">ArtCraft</a> (<a href="https://github.com/storytold">storytold</a>), qui les publie gratuitement en open source. Un grand merci pour ce travail remarquable et pour le choix de le partager avec tous.</p>
+    <p>Ce site n'a rien créé de ces outils : c'est seulement une interface pour lancer leurs versions officielles dans un navigateur, sans installation. Pour suivre le projet, signaler un problème ou soutenir l'auteur, rendez-vous sur <a href="https://getartcraft.com">getartcraft.com</a> et sur les dépôts GitHub de chaque application.</p>
+  </section>
   <footer>
-    Logiciels © ArtCraft / storytold, licences Apache 2.0 et MIT (<a href="https://github.com/storytold">github.com/storytold</a>). Versions officielles republiées sans modification, hors ajout du mode PWA. Versions officielles vérifiées toutes les 3 heures — dernière mise à jour du site : {{DATE}}.
+    Logiciels et icônes © ArtCraft / storytold, licences Apache 2.0 et MIT. Versions officielles republiées sans modification, hors ajout du mode PWA. Versions officielles vérifiées toutes les 3 heures — dernière mise à jour du site : {{DATE}}.
   </footer>
 </main>
 <script>
